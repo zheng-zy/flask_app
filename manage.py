@@ -2,7 +2,7 @@
 import os
 
 from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager, Shell
+from flask_script import Manager, Shell, Server
 
 from app import create_app, db
 from app.models import User, Role
@@ -29,4 +29,6 @@ def test():
 
 
 if __name__ == '__main__':
-    manager.run()
+    app.run()
+    # manager.add_command("runserver", Server(host="0.0.0.0", port=9000))
+    # manager.run()
