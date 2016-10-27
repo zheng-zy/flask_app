@@ -15,8 +15,8 @@ class Config:
     MAIL_USE_TLS = True
     # MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     # MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    # MAIL_USERNAME = 'zhezhiyong@163.com'
-    MAIL_PASSWORD = ''
+    MAIL_USERNAME = 'zhezhiyong@163.com'
+    MAIL_PASSWORD = 'Zzy12345'
     FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
     # FLASKY_MAIL_SENDER = 'Flasky Admin <flasky@example.com>'
     FLASKY_MAIL_SENDER = 'zhezhiyong@163.com'
@@ -54,5 +54,4 @@ config = {
 
 if __name__ == "__main__":
     a = config.get('default')
-    print a.MAIL_PORT
     pass
