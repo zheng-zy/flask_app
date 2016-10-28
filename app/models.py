@@ -1,5 +1,7 @@
 # coding=utf-8
 
+from datetime import datetime
+
 from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -70,6 +72,12 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
 
+    name = db.Column(db.String(64))
+    location = db.Column(db.String(64))
+    about_me = db.Column(db.Text())
+    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+
     confirmed = db.Column(db.Boolean, default=False)
 
     def __init__(self, **kwargs):
@@ -80,7 +88,18 @@ class User(UserMixin, db.Model):
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
 
+    def ping(self):
+        """
+        记录最后一次访问时间
+        """
+        self.last_seen = datetime.utcnow()
+        db.session.add(self)
+
     def can(self, permissions):
+        """
+        权限判断
+        :param permissions: 当前权限值
+        """
         return self.role is not None and (self.role.permissions & permissions) == permissions
 
     def is_administrator(self):
