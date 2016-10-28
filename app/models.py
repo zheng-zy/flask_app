@@ -9,38 +9,38 @@ from . import db
 from . import login_manager
 
 
-# 用户角色
-# 匿名 0b00000000 0x00
-# 用户 0b00000111 0x07
-# 协管 0b00001111 0x0f
-# 管理 0b11111111 0xff
-class Permisssion:
+class Permission:
     # 0b00000001 关注用户
     FOLLOW = 0x01
     # 0b00000010 发表评论
     COMMENT = 0x02
     # 0b00000100 写文章
-    WRITE_APTICLES = 0x03
+    WRITE_ARTICLES = 0x03
     # 0b00001000 管理评论
     MODERATE_COMMENTS = 0x04
     # 0b10000000 管理员
     ADMINISTER = 0x88
 
 
+# 用户角色
+# 匿名 0b00000000 0x00
+# 用户 0b00000111 0x07
+# 协管 0b00001111 0x0f
+# 管理 0b11111111 0xff
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False, index=True)
-    permissions = db.column(db.Integer)
+    permissions = db.Column(db.Integer)
     users = db.relationship('User', backref='role', lazy='dynamic')
 
     @staticmethod
     def insert_roles():
         roles = {
-            'User': (Permisssion.FOLLOW | Permisssion.COMMENT | Permisssion.WRITE_APTICLES, True),
+            'User': (Permission.FOLLOW | Permission.COMMENT | Permission.WRITE_ARTICLES, True),
             'Moderator': (
-                Permisssion.FOLLOW | Permisssion.COMMENT | Permisssion.WRITE_APTICLES | Permisssion.MODERATE_COMMENTS,
+                Permission.FOLLOW | Permission.COMMENT | Permission.WRITE_ARTICLES | Permission.MODERATE_COMMENTS,
                 False),
             'Administrator': (0xff, False)
         }
@@ -84,7 +84,7 @@ class User(UserMixin, db.Model):
         return self.role is not None and (self.role.permissions & permissions) == permissions
 
     def is_administrator(self):
-        return self.can(Permisssion.ADMINISTER)
+        return self.can(Permission.ADMINISTER)
 
     def generate_confirmation_token(self, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)

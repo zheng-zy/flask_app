@@ -1,5 +1,6 @@
 .idea/
-/migrations/
+migrations/
+wechat/
 config.py
 
 # Byte-compiled / optimized / DLL files
