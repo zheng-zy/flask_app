@@ -68,6 +68,15 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+class Follow(db.Model):
+    __tablename__ = 'follows'
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'),
+                            primary_key=True)
+    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'),
+                            primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -87,6 +96,14 @@ class User(UserMixin, db.Model):
     avatar_hash = db.Column(db.String(32))
 
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+    followed = db.relationship('Follow', foreign_keys=[Follow.follower_id],
+                               backref=db.backref('follower', lazy='joined'), lazy='dynamic',
+                               cascade='all, delete-orphan')
+
+    followers = db.relationship('Follow', foreign_keys=[Follow.followed_id],
+                                backref=db.backref('followed', lazy='joined'), lazy='dynamic',
+                                cascade='all, delete-orphan')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -118,6 +135,34 @@ class User(UserMixin, db.Model):
                 db.session.commit()
             except IntegrityError:
                 db.session.rollback()
+
+    def follow(self, user):
+        """
+        关注
+        """
+        if not self.is_following(user):
+            f = Follow(follower=self, followed=user)
+            db.session.add(f)
+
+    def unfollow(self, user):
+        """
+        取消关注
+        """
+        f = self.followed.filter_by(followed_id=user.id).first()
+        if f:
+            db.session.delete(f)
+
+    def is_following(self, user):
+        """
+        当前用户是否已经关注
+        """
+        return self.followed.filter_by(followed_id=user.id).first() is not None
+
+    def is_followed_by(self, user):
+        """
+        是否被当前用户关注
+        """
+        return self.followers.filter_by(follower_id=user.id).first() is not None
 
     def gravatar(self, size=100, default='identicon', rating='g'):
         if request.is_secure:
