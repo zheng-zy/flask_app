@@ -1,0 +1,3 @@
+-r common.txt
+# 生成测试数据
+ForgeryPy==0.1
