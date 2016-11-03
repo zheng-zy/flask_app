@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import render_template, redirect, url_for, abort, request
+from flask import render_template, redirect, url_for, abort, request, make_response
 from flask_login import current_user, flash, login_required, current_app
 
 from . import main
@@ -9,10 +9,26 @@ from ..decorators import admin_required, permission_required
 from ..models import User, Role, Permission, Post
 
 
+@main.route('/all')
+@login_required
+def show_all():
+    resp = make_response(redirect(url_for('.index')))
+    resp.set_cookie('show_followed', '', max_age=30 * 24 * 60 * 60)
+    return resp
+
+
+@main.route('/followed')
+@login_required
+def show_followed():
+    resp = make_response(redirect(url_for('.index')))
+    resp.set_cookie('show_followed', '1', max_age=30 * 24 * 60 * 60)
+    return resp
+
+
 @main.route('/followed_by/<username>')
 def followed_by(username):
     """
-    bug
+    查询自己关注的人
     """
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -20,13 +36,16 @@ def followed_by(username):
         return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
     pagination = user.followed.paginate(page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
-    follows = [{'user': item.follower, 'timestamp': item.timestamp} for item in pagination.items]
+    follows = [{'user': item.followed, 'timestamp': item.timestamp} for item in pagination.items]
     return render_template('followers.html', user=user, title='Followed by', endpoint='.followed_by',
                            pagination=pagination, follows=follows)
 
 
 @main.route('/followers/<username>')
 def followers(username):
+    """
+    查询关注自己的人
+    """
     user = User.query.filter_by(username=username).first()
     if user is None:
         flash('Invalid user.')
@@ -105,9 +124,17 @@ def index():
         post = Post(body=form.body.data, author=current_user._get_current_object())
         db.session.add(post)
         return redirect(url_for('.index'))
+    show_follewed = False
+    if current_user.is_authenticated:
+        show_follewed = bool(request.cookies.get('show_followed', ''))
+    if show_follewed:
+        query = current_user.followed_posts
+    else:
+        query = Post.query
     page = request.args.get('page', 1, type=int)
-    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, per_page=current_app.config[
-        'FLASKY_POSTS_PER_PAGE'], error_out=False)
+    pagination = query.order_by(Post.timestamp.desc()).paginate(page,
+                                                                per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+                                                                error_out=False)
     posts = pagination.items
     return render_template('index.html', form=form, posts=posts, pagination=pagination)
 
