@@ -6,7 +6,7 @@ from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
 from ..decorators import admin_required, permission_required
-from ..models import User, Role, Permission, Post
+from ..models import User, Role, Permission, Post, Follow
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -152,7 +152,7 @@ def followers(username):
         flash('Invalid user.')
         return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
-    pagination = user.followers.paginate(
+    pagination = user.followers.filter(Follow.follower_id != user.id).paginate(
         page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'],
         error_out=False)
     follows = [{'user': item.follower, 'timestamp': item.timestamp}
@@ -169,7 +169,7 @@ def followed_by(username):
         flash('Invalid user.')
         return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
-    pagination = user.followed.paginate(
+    pagination = user.followed.filter(Follow.followed_id != user.id).paginate(
         page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'],
         error_out=False)
     follows = [{'user': item.followed, 'timestamp': item.timestamp}
