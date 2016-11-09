@@ -15,14 +15,15 @@ class Config:
     MAIL_USE_TLS = True
     # MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     # MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    MAIL_USERNAME = 'zhezhiyong@163.com'
+    MAIL_USERNAME = 'sumonian@163.com'
     MAIL_PASSWORD = 'Zzy12345'
     FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
     # FLASKY_MAIL_SENDER = 'Flasky Admin <flasky@example.com>'
-    FLASKY_MAIL_SENDER = 'zhezhiyong@163.com'
+    FLASKY_MAIL_SENDER = 'sumonian@163.com'
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
     FLASKY_POSTS_PER_PAGE = 10
     FLASKY_FOLLOWERS_PER_PAGE = 10
+    FLASKY_COMMENTS_PER_PAGE = 10
 
     @staticmethod
     def init_app(app):
