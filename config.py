@@ -16,7 +16,7 @@ class Config:
     # MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     # MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_USERNAME = 'sumonian@163.com'
-    MAIL_PASSWORD = 'Zzy12345'
+    MAIL_PASSWORD = 'test1234'
     FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
     # FLASKY_MAIL_SENDER = 'Flasky Admin <flasky@example.com>'
     FLASKY_MAIL_SENDER = 'sumonian@163.com'

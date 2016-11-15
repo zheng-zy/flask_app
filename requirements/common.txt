@@ -20,3 +20,6 @@ flask-login==0.3.2
 flask-pagedown==0.2.2
 markdown==2.6.7
 bleach==1.4.3
+
+# flask rest 服务
+flask-httpauth=3.2.1

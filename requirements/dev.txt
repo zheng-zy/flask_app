@@ -1,3 +1,7 @@
 -r common.txt
 # 生成测试数据
 ForgeryPy==0.1
+# http测试工具
+httpie==0.9.6
+# 代码覆盖工具
+coverage==4.2

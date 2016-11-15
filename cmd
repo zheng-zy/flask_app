@@ -10,3 +10,9 @@ python manage.py shell
 
 
 python manage.py runserver
+
+
+httpie测试命令
+http --json --auth zhezhiyong@163.com:123 GET http://127.0.0.1:5000/api/v1.0/posts/
+认证令牌
+http --json --auth zhezhiyong@163.com:123 GET http://127.0.0.1:5000/api/v1.0/token
