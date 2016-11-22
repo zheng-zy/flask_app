@@ -6,8 +6,8 @@ from . import main
 @main.app_errorhandler(403)
 def forbidden(e):
     if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
-        response = jsonify({'error': 'forbidden', 'message': e})
-        response.status = 403
+        response = jsonify({'error': 'forbidden'})
+        response.status_code = 403
         return response
     return render_template('403.html'), 403
 
@@ -15,8 +15,8 @@ def forbidden(e):
 @main.app_errorhandler(404)
 def page_not_found(e):
     if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
-        response = jsonify({'error': 'page not found'})
-        response.status = 404
+        response = jsonify({'error': 'not found'})
+        response.status_code = 404
         return response
     return render_template('404.html'), 404
 
@@ -25,6 +25,6 @@ def page_not_found(e):
 def internal_server_error(e):
     if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
         response = jsonify({'error': 'internal server error'})
-        response.status = 500
+        response.status_code = 500
         return response
     return render_template('500.html'), 500

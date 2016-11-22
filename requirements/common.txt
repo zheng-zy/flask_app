@@ -26,3 +26,4 @@ flask-httpauth==3.2.1
 
 # mongodb
 flask-pymongo==0.4.1
+lask-mongoengine

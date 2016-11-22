@@ -10,7 +10,7 @@ from pymongo.collection import ObjectId
 
 class MongoDBTestCase(unittest.TestCase):
     def setUp(self):
-        self.db = MongoClient('192.168.97.120').books
+        self.db = MongoClient('127.0.0.1').books
         self.collection = self.db.books
         self.book = self.collection.Book
         self.book_info = self.collection.BookInfo
