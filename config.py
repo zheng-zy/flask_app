@@ -43,6 +43,8 @@ class Config:
     # PREFIX_READ_PREFERENCE, PREFIX_USERNAME, PREFIX_PASSWORD, PREFIX_URI
     # MONGODB_SETTINGS = {'HOST': '192.168.97.120', 'DBNAME': 'books'}
 
+    SERVER_NAME = 'localhost:5000'
+
     @staticmethod
     def init_app(app):
         pass
