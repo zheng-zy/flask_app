@@ -1,0 +1,20 @@
+.book-item {
+    width: 960px;
+    margin-bottom: 10px;
+    padding: 10px;
+    height: 120px;
+}
+
+.book-picture {
+    height: 100px;
+    width: 100px;
+    background: orange;
+    float: left;
+}
+
+.book-content {
+    height: 100px;
+    width: 830px;
+    float: right;
+}
+

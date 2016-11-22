@@ -26,6 +26,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                    <li><a href="{{ url_for('book.index') }}">Book</a></li>
                     {% if current_user.is_authenticated %}
                         <li>
                             <a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a>
@@ -71,5 +72,28 @@
 
 {% block scripts %}
     {{ super() }}
-    {{ moment.include_moment() }}
+    {#    {{ moment.include_moment() }}#}
+    <script src="{{ url_for('static', filename='moment-with-locales.min.js') }}" type="text/javascript"></script>
+    <script>
+        moment.locale("en");
+        function flask_moment_render(elem) {
+            $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+            $(elem).removeClass('flask-moment').show();
+        }
+        function flask_moment_render_all() {
+            $('.flask-moment').each(function () {
+                flask_moment_render(this);
+                if ($(this).data('refresh')) {
+                    (function (elem, interval) {
+                        setInterval(function () {
+                            flask_moment_render(elem)
+                        }, interval);
+                    })(this, $(this).data('refresh'));
+                }
+            })
+        }
+        $(document).ready(function () {
+            flask_moment_render_all();
+        });
+    </script>
 {% endblock %}

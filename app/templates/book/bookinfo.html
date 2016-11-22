@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Flasky - {{ book.book_name }}{% endblock %}
+
+{% block page_content %}
+    {% include 'book/_book.html' %}
+    <h4>章节</h4>
+    <table class="table table-bordered">
+        {% for bookinfo in bookinfos %}
+            {% if 1 == loop.index%5 %}
+                <tr>
+                    <td><a href="{{ url_for('book.chapter', id=bookinfo._id) }}">{{ bookinfo.book_chapter }}</a></td>
+                    {% elif 0 == loop.index%5 %}
+                    <td><a href="{{ url_for('book.chapter', id=bookinfo._id) }}">{{ bookinfo.book_chapter }}</a></td>
+                </tr>
+            {% else %}
+                <td><a href="{{ url_for('book.chapter', id=bookinfo._id) }}">{{ bookinfo.book_chapter }}</a></td>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endblock %}
+

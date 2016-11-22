@@ -1,0 +1,9 @@
+<ul class="books list-group">
+    {% for book in books %}
+        <li class="book list-group-item"><span class="badge">作者: {{ book.book_author }}</span>
+            <h3 class="list-group-item-heading glyphicon glyphicon-book"><a
+                    href="{{ url_for('book.info', id=book._id) }}">{{ book.book_name }}</a></h3>
+            <p class="list-group-item-text">{{ book.book_desc }}</p>
+        </li>
+    {% endfor %}
+</ul>

@@ -5,3 +5,5 @@ ForgeryPy==0.1
 httpie==0.9.6
 # 代码覆盖工具
 coverage==4.2
+# Selenium测试工具
+selenium==3.0.1

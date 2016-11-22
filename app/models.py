@@ -409,3 +409,4 @@ class Comment(db.Model):
 # body字段被设置值，就会自动调用on_changed_body函数
 db.event.listen(Post.body, 'set', Post.on_changed_body)
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
+

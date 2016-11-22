@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as macros %}
+
+{% block title %}Flasky - Book{% endblock %}
+
+{% block page_content %}
+    {% include 'book/_book.html' %}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {#    {{ pagedown.include_pagedown() }}#}
+{% endblock %}
